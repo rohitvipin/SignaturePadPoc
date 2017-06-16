@@ -17,7 +17,9 @@ namespace SignaturePadPoc
                 {
                     Id = i,
                     SubTitle = $"Subtitle {i}",
-                    Title = $"Title {i}"
+                    Title = $"Title {i}",
+                    Url = i % 2 == 0 ? "https://www.clarity-ventures.com/resources/xamarin/xamarin-vs-titanium-vs-phonegap-vs-cordova-a-comparison"
+                    : "https://insanelab.com/blog/mobile-development/xamarin-vs-cordova-cross-platform-development/"
                 });
             }
 

@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SignaturePadPoc.DocumentPage">
     <StackLayout VerticalOptions="FillAndExpand">
-        <Label Text="TBD"/>
-        <Button Text="Submit" VerticalOptions="End" BackgroundColor="ForestGreen" TextColor="White" Clicked="Button_OnClicked"/>
+        <ActivityIndicator x:Name="BusyIndicator" HorizontalOptions="Center"/>
+        <WebView x:Name="WebView" VerticalOptions="FillAndExpand"/>
+        <Button Text="Accept" VerticalOptions="End" BackgroundColor="ForestGreen" TextColor="White" Clicked="Button_OnClicked"/>
     </StackLayout>
 </ContentPage>
