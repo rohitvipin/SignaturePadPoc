@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Threading.Tasks;
 using SignaturePad.Forms;
 using Xamarin.Forms;
 
@@ -8,7 +7,7 @@ namespace SignaturePadPoc
 {
     public partial class SignaturePage : ContentPage
     {
-        private DocumentEntity _selectedDocument;
+        private readonly DocumentEntity _selectedDocument;
 
         public SignaturePage()
         {
@@ -18,6 +17,7 @@ namespace SignaturePadPoc
         public SignaturePage(DocumentEntity selectedDocument) : this()
         {
             _selectedDocument = selectedDocument;
+            Title = _selectedDocument.Title;
         }
 
         private async void Button_OnClicked(object sender, EventArgs e)
@@ -27,9 +27,11 @@ namespace SignaturePadPoc
                 using (var ms = new MemoryStream())
                 {
                     await stream.CopyToAsync(ms);
-                    var base64String = Convert.ToBase64String(ms.ToArray());
+                    _selectedDocument.SignatureBase64 = Convert.ToBase64String(ms.ToArray());
                 }
             }
+
+            await Navigation.PopToRootAsync(true);
         }
     }
 }

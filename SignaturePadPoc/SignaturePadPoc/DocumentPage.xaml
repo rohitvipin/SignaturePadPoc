@@ -2,9 +2,13 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SignaturePadPoc.DocumentPage">
-    <StackLayout VerticalOptions="FillAndExpand">
-        <ActivityIndicator x:Name="BusyIndicator" HorizontalOptions="Center"/>
-        <WebView x:Name="WebView" VerticalOptions="FillAndExpand"/>
-        <Button Text="Accept" VerticalOptions="End" BackgroundColor="ForestGreen" TextColor="White" Clicked="Button_OnClicked"/>
-    </StackLayout>
+    <Grid VerticalOptions="FillAndExpand">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <WebView Grid.Row="0" x:Name="WebView" VerticalOptions="FillAndExpand"/>
+        <Button Grid.Row="1" Text="Accept" VerticalOptions="End" BackgroundColor="ForestGreen" TextColor="White" Clicked="Button_OnClicked"/>
+        <ActivityIndicator Grid.Row="0" Grid.RowSpan="2" x:Name="BusyIndicator" HorizontalOptions="Center" VerticalOptions="Center"/>
+    </Grid>
 </ContentPage>
