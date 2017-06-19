@@ -1,7 +1,7 @@
 ﻿using Microsoft.WindowsAzure.MobileServices;
 using Newtonsoft.Json;
 
-namespace SignaturePadPoc
+namespace SignaturePadPoc.DAL.Models
 {
     public class TodoItem
     {

@@ -38,8 +38,8 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Constants.cs" />
-    <Compile Include="DocumentEntity.cs" />
+    <Compile Include="Common\Constants.cs" />
+    <Compile Include="Entities\DocumentEntity.cs" />
     <Compile Include="DocumentPage.xaml.cs">
       <DependentUpon>DocumentPage.xaml</DependentUpon>
     </Compile>
@@ -50,8 +50,8 @@
     <Compile Include="SignaturePage.xaml.cs">
       <DependentUpon>SignaturePage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TodoItem.cs" />
-    <Compile Include="TodoItemManager.cs" />
+    <Compile Include="DAL\Models\TodoItem.cs" />
+    <Compile Include="DAL\TodoItemManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="MainPage.xaml">

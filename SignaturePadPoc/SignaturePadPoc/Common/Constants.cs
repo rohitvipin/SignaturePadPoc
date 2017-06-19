@@ -1,4 +1,4 @@
-﻿namespace SignaturePadPoc
+﻿namespace SignaturePadPoc.Common
 {
 	public static class Constants
 	{

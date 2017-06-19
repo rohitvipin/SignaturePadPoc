@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 using Microsoft.WindowsAzure.MobileServices;
 using Microsoft.WindowsAzure.MobileServices.SQLiteStore;
 using Microsoft.WindowsAzure.MobileServices.Sync;
+using SignaturePadPoc.Common;
+using SignaturePadPoc.DAL.Models;
 
-namespace SignaturePadPoc
+namespace SignaturePadPoc.DAL
 {
     public class TodoItemManager
     {

@@ -1,4 +1,4 @@
-﻿namespace SignaturePadPoc
+﻿namespace SignaturePadPoc.Entities
 {
     public class DocumentEntity
     {
