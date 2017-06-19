@@ -1,4 +1,5 @@
-﻿using Microsoft.WindowsAzure.MobileServices;
+﻿using System;
+using Microsoft.WindowsAzure.MobileServices;
 using Microsoft.WindowsAzure.MobileServices.SQLiteStore;
 using SignaturePadPoc.Common;
 using SignaturePadPoc.DAL.Models;
@@ -13,6 +14,8 @@ namespace SignaturePadPoc.DAL
         private static UserDocumentSignatureRepository _userDocumentSignatureRepositoryInstance;
 
         public static bool IsInitialized { get; private set; }
+        public static DateTime LastSuccessfulSyncDateTime = DateTime.MinValue;
+        public static bool IsSyncing;
 
         static RepositoryManager()
         {

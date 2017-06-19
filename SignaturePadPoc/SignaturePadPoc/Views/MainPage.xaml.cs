@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using SignaturePadPoc.Common;
@@ -19,10 +21,7 @@ namespace SignaturePadPoc.Views
         {
             InitializeComponent();
             ListView.ItemsSource = _documentEntities;
-            ListView.RefreshCommand = new Command(async t =>
-            {
-                await RefreshListDataAsync();
-            });
+            ListView.RefreshCommand = new Command(async t => await RefreshListDataAsync());
         }
 
         protected override async void OnAppearing()
@@ -41,11 +40,13 @@ namespace SignaturePadPoc.Views
         {
             ListView.IsRefreshing = true;
 
-            var userDocuments = (await RepositoryManager.UserDocumentRepositoryInstance.GetAsync(x => x.AssignedUserId == ApplicationContext.LoggedInUserId && x.IsCompleted == false))?.Select(x => x.DocumentId).ToList();
+            var userDocuments = (await RepositoryManager.UserDocumentRepositoryInstance.GetAsync(x => x.AssignedUserId == ApplicationContext.LoggedInUserId && x.IsCompleted == false)).ToList();
 
             if (userDocuments?.Count > 0)
             {
-                Reset((await RepositoryManager.DocumentRepositoryInstance.GetAsync(x => userDocuments.Any(y => y == x.DocumentId)))?.ToList());
+                Reset((await RepositoryManager.DocumentRepositoryInstance.GetAsync(x => userDocuments.Any(y => y.DocumentId == x.DocumentId)))
+                    ?.Where(x => userDocuments.Any(y => y.DocumentId == x.DocumentId))
+                    .ToList());
             }
             else
             {

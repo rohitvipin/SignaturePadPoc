@@ -13,9 +13,6 @@ namespace SignaturePadPoc.DAL.Repositories
 {
     public class RepositoryBase<T> where T : ModelBase
     {
-        private DateTime _lastSuccessfulSyncDateTime = DateTime.MinValue;
-        private bool _isSyncing;
-
         protected readonly IMobileServiceSyncTable<T> CurrentTable;
 
         public RepositoryBase()
@@ -39,7 +36,7 @@ namespace SignaturePadPoc.DAL.Repositories
 
         protected async Task SyncAsync()
         {
-            if (_isSyncing || DateTime.Now.AddMinutes(-5) < _lastSuccessfulSyncDateTime)
+            if (RepositoryManager.IsSyncing || DateTime.Now.AddMinutes(-5) < RepositoryManager.LastSuccessfulSyncDateTime)
             {
                 return;
             }
@@ -53,12 +50,12 @@ namespace SignaturePadPoc.DAL.Repositories
 
             try
             {
-                _isSyncing = true;
+                RepositoryManager.IsSyncing = true;
 
                 await ApplicationContext.MobileServiceClientInstance.SyncContext.PushAsync();
                 await CurrentTable.PullAsync($"all{nameof(T)}", CurrentTable.CreateQuery());
 
-                _lastSuccessfulSyncDateTime = DateTime.Now;
+                RepositoryManager.LastSuccessfulSyncDateTime = DateTime.Now;
             }
             catch (MobileServicePushFailedException exc)
             {
@@ -89,7 +86,7 @@ namespace SignaturePadPoc.DAL.Repositories
                 }
             }
 
-            _isSyncing = false;
+            RepositoryManager.IsSyncing = false;
         }
 
         public async Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>> filterCondition = null, Expression<Func<T, bool>> orderBy = null)
@@ -140,8 +137,8 @@ namespace SignaturePadPoc.DAL.Repositories
 
         public async Task ForceSyncAsync()
         {
-            _isSyncing = false;
-            _lastSuccessfulSyncDateTime = DateTime.MinValue;
+            RepositoryManager.IsSyncing = false;
+            RepositoryManager.LastSuccessfulSyncDateTime = DateTime.MinValue;
             await SyncAsync();
         }
     }
