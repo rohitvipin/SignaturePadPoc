@@ -1,9 +1,9 @@
 ﻿namespace SignaturePadPoc.Common
 {
-	public static class Constants
-	{
-		// Replace strings with your Azure Mobile App endpoint.
-		public static string ApplicationUrl = @"https://cesofflinesignturesyncpoc.azurewebsites.net";
-	}
+    public static class Constants
+    {
+        public const string ApplicationUrl = @"https://cesofflinesignturesyncpoc.azurewebsites.net";
+        public const string OfflineDbPath = @"localstore.db";
+    }
 }
 

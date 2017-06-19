@@ -11,17 +11,13 @@ using SignaturePadPoc.DAL.Models;
 
 namespace SignaturePadPoc.DAL
 {
-    public class TodoItemManager
+    public class TodoItemManager : ManagerBase
     {
         private readonly IMobileServiceSyncTable<TodoItem> _todoTable;
 
-        private const string OfflineDbPath = @"localstore.db";
-
         private TodoItemManager()
         {
-            CurrentClient = new MobileServiceClient(Constants.ApplicationUrl);
-
-            var store = new MobileServiceSQLiteStore(OfflineDbPath);
+            var store = new MobileServiceSQLiteStore(Constants.OfflineDbPath);
             store.DefineTable<TodoItem>();
 
             //Initializes the SyncContext using the default IMobileServiceSyncHandler.
@@ -31,10 +27,6 @@ namespace SignaturePadPoc.DAL
         }
 
         public static TodoItemManager DefaultManager { get; } = new TodoItemManager();
-
-        public MobileServiceClient CurrentClient { get; }
-
-        public bool IsOfflineEnabled => _todoTable != null;
 
         public async Task<IEnumerable<TodoItem>> GetTodoItemsAsync(bool syncItems = false)
         {
@@ -58,7 +50,7 @@ namespace SignaturePadPoc.DAL
             return null;
         }
 
-        public async Task SaveTaskAsync(TodoItem item)
+        public async Task SaveAsync(TodoItem item)
         {
             if (item.Id == null)
             {
