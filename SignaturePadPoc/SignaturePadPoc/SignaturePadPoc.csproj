@@ -40,6 +40,7 @@
     </Compile>
     <Compile Include="Common\Constants.cs" />
     <Compile Include="Common\ApplicationContext.cs" />
+    <Compile Include="Common\Extensions.cs" />
     <Compile Include="DAL\DocumentRepository.cs" />
     <Compile Include="DAL\JobUserRepository.cs" />
     <Compile Include="DAL\RepositoryBase.cs" />
@@ -52,6 +53,11 @@
     <Compile Include="DAL\UserDocumentRepository.cs" />
     <Compile Include="DAL\UserDocumentSignatureRepository.cs" />
     <Compile Include="Entities\DocumentEntity.cs" />
+    <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Compile Include="ViewModels\AddDocumentViewModel.cs" />
+    <Compile Include="Views\AddDocumentPage.xaml.cs">
+      <DependentUpon>AddDocumentPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\DocumentPage.xaml.cs">
       <DependentUpon>DocumentPage.xaml</DependentUpon>
     </Compile>
@@ -62,8 +68,6 @@
     <Compile Include="Views\SignaturePage.xaml.cs">
       <DependentUpon>SignaturePage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DAL\Models\TodoItem.cs" />
-    <Compile Include="DAL\TodoItemRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\MainPage.xaml">
@@ -149,6 +153,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\DocumentPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\AddDocumentPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>

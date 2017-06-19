@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SignaturePadPoc.Views.AddDocumentPage"
+             Title="Add New Document">
+    <StackLayout VerticalOptions="FillAndExpand">
+        <Entry Placeholder="DocumentId" Text="{Binding Document.DocumentId}" />
+        <Entry Placeholder="Title" Text="{Binding Document.Title}"/>
+        <Entry Placeholder="Description" Text="{Binding Document.Description}"/>
+        <Entry Placeholder="Document Url" Text="{Binding Document.DocumentUrl}"/>
+        <Entry Placeholder="Assigned UserId" Text="{Binding UserId}" />
+        <ActivityIndicator HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"/>
+        <Button Text="Save" Clicked="Button_OnClicked" VerticalOptions="End" HorizontalOptions="FillAndExpand" BackgroundColor="Green" TextColor="White"/>
+    </StackLayout>
+</ContentPage>

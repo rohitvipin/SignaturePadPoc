@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.MobileServices;
-using Microsoft.WindowsAzure.MobileServices.SQLiteStore;
 using Microsoft.WindowsAzure.MobileServices.Sync;
 using SignaturePadPoc.Common;
 using SignaturePadPoc.DAL.Models;
@@ -14,14 +13,17 @@ namespace SignaturePadPoc.DAL
 {
     public class RepositoryBase<T> where T : ModelBase
     {
+        private DateTime _lastSuccessfulSyncDateTime = DateTime.MinValue;
+        private bool _isSyncing;
+
         protected readonly IMobileServiceSyncTable<T> CurrentTable;
 
         public RepositoryBase()
         {
-            var store = new MobileServiceSQLiteStore(Constants.OfflineDbPath);
-            store.DefineTable<T>();
-            ApplicationContext.MobileServiceClientInstance.SyncContext.InitializeAsync(store);
-
+            if (RepositoryManager.IsInitialized != true)
+            {
+                RepositoryManager.Initialize();
+            }
             CurrentTable = ApplicationContext.MobileServiceClientInstance.GetSyncTable<T>();
 
             Plugin.Connectivity.CrossConnectivity.Current.ConnectivityChanged += Current_ConnectivityChanged;
@@ -37,6 +39,11 @@ namespace SignaturePadPoc.DAL
 
         protected async Task SyncAsync()
         {
+            if (_isSyncing || _lastSuccessfulSyncDateTime.AddMinutes(5) < DateTime.Now)
+            {
+                return;
+            }
+
             if (Plugin.Connectivity.CrossConnectivity.Current.IsConnected == false)
             {
                 return;
@@ -46,8 +53,12 @@ namespace SignaturePadPoc.DAL
 
             try
             {
+                _isSyncing = true;
+
                 await ApplicationContext.MobileServiceClientInstance.SyncContext.PushAsync();
                 await CurrentTable.PullAsync($"all{nameof(T)}", CurrentTable.CreateQuery());
+
+                _lastSuccessfulSyncDateTime = DateTime.Now;
             }
             catch (MobileServicePushFailedException exc)
             {
@@ -77,6 +88,8 @@ namespace SignaturePadPoc.DAL
                     Debug.WriteLine(@"Error executing sync operation. Item: {0} ({1}). Operation discarded.", error.TableName, error.Item["id"]);
                 }
             }
+
+            _isSyncing = false;
         }
 
         public async Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>> filterCondition = null, Expression<Func<T, bool>> orderBy = null)
@@ -109,6 +122,11 @@ namespace SignaturePadPoc.DAL
 
         public async Task SaveAsync(T item)
         {
+            if (item == null)
+            {
+                return;
+            }
+
             if (item.Id == null)
             {
                 await CurrentTable.InsertAsync(item);

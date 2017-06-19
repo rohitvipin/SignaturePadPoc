@@ -4,7 +4,10 @@
              x:Class="SignaturePadPoc.Views.MainPage"
              Title="CES Poc">
 
-    <ListView x:Name="ListView" VerticalOptions="FillAndExpand" ItemSelected="ListView_OnItemSelected">
+    <ListView x:Name="ListView" VerticalOptions="FillAndExpand" ItemSelected="ListView_OnItemSelected" IsPullToRefreshEnabled="True">
+        <ListView.Header>
+            <Button Text="Add New Record" Clicked="Button_OnClicked" BackgroundColor="SlateGray" TextColor="White"/>
+        </ListView.Header>
         <ListView.ItemTemplate>
             <DataTemplate>
                 <TextCell Text="{Binding Title}" Detail="{Binding SubTitle}" />

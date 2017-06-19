@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using SignaturePadPoc.Common;
 using SignaturePadPoc.DAL;
 using SignaturePadPoc.DAL.Models;
@@ -17,17 +19,33 @@ namespace SignaturePadPoc.Views
         {
             InitializeComponent();
             ListView.ItemsSource = _documentEntities;
+            ListView.RefreshCommand = new Command(async t => await RefreshListDataAsync());
         }
 
         protected override async void OnAppearing()
         {
             base.OnAppearing();
+            await RefreshListDataAsync();
+        }
 
-            var userDocuments = (await RepositoryManager.UserDocumentRepositoryInstance
-                .GetAsync(x => x.AssignedUserId == ApplicationContext.LoggedInUserId && x.IsCompleted == false))
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            _documentEntities.Clear();
+        }
+
+        private async Task RefreshListDataAsync()
+        {
+            ListView.IsRefreshing = true;
+
+            var enumerable = (await RepositoryManager.UserDocumentRepositoryInstance
+                .GetAsync(x => x.AssignedUserId == ApplicationContext.LoggedInUserId && x.IsCompleted == false))?.ToList();
+            var userDocuments = enumerable
                 ?.Select(x => x.DocumentId);
 
             Reset((await RepositoryManager.DocumentRepositoryInstance.GetAsync(x => userDocuments.Any(y => y == x.DocumentId)))?.ToList());
+
+            ListView.IsRefreshing = false;
         }
 
         private void Reset(IReadOnlyCollection<Document> documents)
@@ -43,7 +61,9 @@ namespace SignaturePadPoc.Views
                 _documentEntities.Add(new DocumentEntity
                 {
                     Url = document.DocumentUrl,
-                    Id = document.DocumentId
+                    Id = document.DocumentId,
+                    Title = document.Title,
+                    SubTitle = document.Description
                 });
             }
         }
@@ -64,5 +84,7 @@ namespace SignaturePadPoc.Views
 
             ListView.SelectedItem = null;
         }
+
+        private async void Button_OnClicked(object sender, EventArgs e) => await Navigation.PushAsync(new AddDocumentPage());
     }
 }

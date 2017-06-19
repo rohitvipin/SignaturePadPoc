@@ -1,10 +1,32 @@
-﻿namespace SignaturePadPoc.DAL
+﻿using Microsoft.WindowsAzure.MobileServices;
+using Microsoft.WindowsAzure.MobileServices.SQLiteStore;
+using SignaturePadPoc.Common;
+using SignaturePadPoc.DAL.Models;
+
+namespace SignaturePadPoc.DAL
 {
     public static class RepositoryManager
     {
         private static DocumentRepository _documentRepositoryInstance;
         private static UserDocumentRepository _userDocumentRepositoryInstance;
         private static UserDocumentSignatureRepository _userDocumentSignatureRepositoryInstance;
+
+        public static bool IsInitialized { get; private set; }
+
+        static RepositoryManager()
+        {
+            Initialize();
+        }
+
+        public static void Initialize()
+        {
+            IsInitialized = true;
+            var store = new MobileServiceSQLiteStore(Constants.OfflineDbPath);
+            store.DefineTable<Document>();
+            store.DefineTable<UserDocument>();
+            store.DefineTable<UserDocumentSignature>();
+            ApplicationContext.MobileServiceClientInstance.SyncContext.InitializeAsync(store);
+        }
 
         public static DocumentRepository DocumentRepositoryInstance
         {
@@ -20,7 +42,7 @@
 
         public static UserDocumentSignatureRepository UserDocumentSignatureRepositoryInstance
         {
-            get { return _userDocumentSignatureRepositoryInstance ?? (_userDocumentSignatureRepositoryInstance = new UserDocumentSignatureRepository()); ; }
+            get { return _userDocumentSignatureRepositoryInstance ?? (_userDocumentSignatureRepositoryInstance = new UserDocumentSignatureRepository()); }
             set { _userDocumentSignatureRepositoryInstance = value; }
         }
     }
