@@ -19,7 +19,10 @@ namespace SignaturePadPoc.Views
         {
             InitializeComponent();
             ListView.ItemsSource = _documentEntities;
-            ListView.RefreshCommand = new Command(async t => await RefreshListDataAsync());
+            ListView.RefreshCommand = new Command(async t =>
+            {
+                await RefreshListDataAsync();
+            });
         }
 
         protected override async void OnAppearing()
@@ -38,12 +41,16 @@ namespace SignaturePadPoc.Views
         {
             ListView.IsRefreshing = true;
 
-            var enumerable = (await RepositoryManager.UserDocumentRepositoryInstance
-                .GetAsync(x => x.AssignedUserId == ApplicationContext.LoggedInUserId && x.IsCompleted == false))?.ToList();
-            var userDocuments = enumerable
-                ?.Select(x => x.DocumentId);
+            var userDocuments = (await RepositoryManager.UserDocumentRepositoryInstance.GetAsync(x => x.AssignedUserId == ApplicationContext.LoggedInUserId && x.IsCompleted == false))?.Select(x => x.DocumentId).ToList();
 
-            Reset((await RepositoryManager.DocumentRepositoryInstance.GetAsync(x => userDocuments.Any(y => y == x.DocumentId)))?.ToList());
+            if (userDocuments?.Count > 0)
+            {
+                Reset((await RepositoryManager.DocumentRepositoryInstance.GetAsync(x => userDocuments.Any(y => y == x.DocumentId)))?.ToList());
+            }
+            else
+            {
+                _documentEntities.Clear();
+            }
 
             ListView.IsRefreshing = false;
         }
@@ -86,5 +93,12 @@ namespace SignaturePadPoc.Views
         }
 
         private async void Button_OnClicked(object sender, EventArgs e) => await Navigation.PushAsync(new AddDocumentPage());
+
+        private async void MenuItem_OnClicked(object sender, EventArgs e)
+        {
+            await RepositoryManager.UserDocumentRepositoryInstance.ForceSyncAsync();
+            await RepositoryManager.DocumentRepositoryInstance.ForceSyncAsync();
+            await RefreshListDataAsync();
+        }
     }
 }

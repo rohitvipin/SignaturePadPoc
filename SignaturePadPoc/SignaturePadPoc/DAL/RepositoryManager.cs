@@ -2,6 +2,7 @@
 using Microsoft.WindowsAzure.MobileServices.SQLiteStore;
 using SignaturePadPoc.Common;
 using SignaturePadPoc.DAL.Models;
+using SignaturePadPoc.DAL.Repositories;
 
 namespace SignaturePadPoc.DAL
 {

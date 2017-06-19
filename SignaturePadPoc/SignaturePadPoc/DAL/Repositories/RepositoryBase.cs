@@ -9,7 +9,7 @@ using Microsoft.WindowsAzure.MobileServices.Sync;
 using SignaturePadPoc.Common;
 using SignaturePadPoc.DAL.Models;
 
-namespace SignaturePadPoc.DAL
+namespace SignaturePadPoc.DAL.Repositories
 {
     public class RepositoryBase<T> where T : ModelBase
     {
@@ -39,7 +39,7 @@ namespace SignaturePadPoc.DAL
 
         protected async Task SyncAsync()
         {
-            if (_isSyncing || _lastSuccessfulSyncDateTime.AddMinutes(5) < DateTime.Now)
+            if (_isSyncing || DateTime.Now.AddMinutes(-5) < _lastSuccessfulSyncDateTime)
             {
                 return;
             }
@@ -135,6 +135,13 @@ namespace SignaturePadPoc.DAL
             {
                 await CurrentTable.UpdateAsync(item);
             }
+            await SyncAsync();
+        }
+
+        public async Task ForceSyncAsync()
+        {
+            _isSyncing = false;
+            _lastSuccessfulSyncDateTime = DateTime.MinValue;
             await SyncAsync();
         }
     }

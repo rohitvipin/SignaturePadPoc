@@ -3,6 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SignaturePadPoc.Views.MainPage"
              Title="CES Poc">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Sync" Clicked="MenuItem_OnClicked" />
+    </ContentPage.ToolbarItems>
 
     <ListView x:Name="ListView" VerticalOptions="FillAndExpand" ItemSelected="ListView_OnItemSelected" IsPullToRefreshEnabled="True">
         <ListView.Header>
