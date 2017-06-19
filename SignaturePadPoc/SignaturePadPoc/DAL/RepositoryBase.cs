@@ -12,31 +12,41 @@ using SignaturePadPoc.DAL.Models;
 
 namespace SignaturePadPoc.DAL
 {
-    public class ManagerBase<T> where T : ModelBase
+    public class RepositoryBase<T> where T : ModelBase
     {
         protected readonly IMobileServiceSyncTable<T> CurrentTable;
 
-        protected readonly MobileServiceClient CurrentClient;
-
-        public ManagerBase()
+        public RepositoryBase()
         {
-            CurrentClient = new MobileServiceClient(Constants.ApplicationUrl);
             var store = new MobileServiceSQLiteStore(Constants.OfflineDbPath);
             store.DefineTable<T>();
+            ApplicationContext.MobileServiceClientInstance.SyncContext.InitializeAsync(store);
 
-            //Initializes the SyncContext using the default IMobileServiceSyncHandler.
-            CurrentClient.SyncContext.InitializeAsync(store);
+            CurrentTable = ApplicationContext.MobileServiceClientInstance.GetSyncTable<T>();
 
-            CurrentTable = CurrentClient.GetSyncTable<T>();
+            Plugin.Connectivity.CrossConnectivity.Current.ConnectivityChanged += Current_ConnectivityChanged;
+        }
+
+        private async void Current_ConnectivityChanged(object sender, Plugin.Connectivity.Abstractions.ConnectivityChangedEventArgs e)
+        {
+            if (e?.IsConnected == true)
+            {
+                await SyncAsync();
+            }
         }
 
         protected async Task SyncAsync()
         {
+            if (Plugin.Connectivity.CrossConnectivity.Current.IsConnected == false)
+            {
+                return;
+            }
+
             ReadOnlyCollection<MobileServiceTableOperationError> syncErrors = null;
 
             try
             {
-                await CurrentClient.SyncContext.PushAsync();
+                await ApplicationContext.MobileServiceClientInstance.SyncContext.PushAsync();
                 await CurrentTable.PullAsync($"all{nameof(T)}", CurrentTable.CreateQuery());
             }
             catch (MobileServicePushFailedException exc)
@@ -69,14 +79,11 @@ namespace SignaturePadPoc.DAL
             }
         }
 
-        public async Task<IEnumerable<T>> GetTodoItemsAsync(bool syncItems = false, Expression<Func<T, bool>> filterCondition = null, Expression<Func<T, bool>> orderBy = null)
+        public async Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>> filterCondition = null, Expression<Func<T, bool>> orderBy = null)
         {
             try
             {
-                if (syncItems)
-                {
-                    await SyncAsync();
-                }
+                await SyncAsync();
 
                 var mobileServiceSyncTable = CurrentTable;
                 if (filterCondition != null)
@@ -110,6 +117,7 @@ namespace SignaturePadPoc.DAL
             {
                 await CurrentTable.UpdateAsync(item);
             }
+            await SyncAsync();
         }
     }
 }

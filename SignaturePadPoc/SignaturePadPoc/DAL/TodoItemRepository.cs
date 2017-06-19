@@ -9,7 +9,7 @@ using SignaturePadPoc.DAL.Models;
 
 namespace SignaturePadPoc.DAL
 {
-    public class TodoItemManager : ManagerBase<TodoItem>
+    public class TodoItemRepository : RepositoryBase<TodoItem>
     {
     }
 }

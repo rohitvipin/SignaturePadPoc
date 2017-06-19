@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using SignaturePad.Forms;
+using SignaturePadPoc.Entities;
 using Xamarin.Forms;
 
 namespace SignaturePadPoc.Views

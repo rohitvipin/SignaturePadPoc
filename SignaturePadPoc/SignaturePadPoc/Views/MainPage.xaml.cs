@@ -1,29 +1,51 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using SignaturePadPoc.Common;
+using SignaturePadPoc.DAL;
+using SignaturePadPoc.DAL.Models;
+using SignaturePadPoc.Entities;
 using Xamarin.Forms;
 
 namespace SignaturePadPoc.Views
 {
     public partial class MainPage : ContentPage
     {
-        private readonly List<DocumentEntity> _documentEntities = new List<DocumentEntity>();
+        private readonly ObservableCollection<DocumentEntity> _documentEntities = new ObservableCollection<DocumentEntity>();
 
         public MainPage()
         {
             InitializeComponent();
+            ListView.ItemsSource = _documentEntities;
+        }
 
-            for (var i = 0; i < 25; i++)
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+
+            var userDocuments = (await RepositoryManager.UserDocumentRepositoryInstance
+                .GetAsync(x => x.AssignedUserId == ApplicationContext.LoggedInUserId && x.IsCompleted == false))
+                ?.Select(x => x.DocumentId);
+
+            Reset((await RepositoryManager.DocumentRepositoryInstance.GetAsync(x => userDocuments.Any(y => y == x.DocumentId)))?.ToList());
+        }
+
+        private void Reset(IReadOnlyCollection<Document> documents)
+        {
+            _documentEntities.Clear();
+            if (!(documents?.Count > 0))
+            {
+                return;
+            }
+
+            foreach (var document in documents)
             {
                 _documentEntities.Add(new DocumentEntity
                 {
-                    Id = i,
-                    SubTitle = $"Subtitle {i}",
-                    Title = $"Title {i}",
-                    Url = i % 2 == 0 ? "https://www.clarity-ventures.com/resources/xamarin/xamarin-vs-titanium-vs-phonegap-vs-cordova-a-comparison"
-                    : "https://insanelab.com/blog/mobile-development/xamarin-vs-cordova-cross-platform-development/"
+                    Url = document.DocumentUrl,
+                    Id = document.DocumentId
                 });
             }
-
-            ListView.ItemsSource = _documentEntities;
         }
 
         private async void ListView_OnItemSelected(object sender, SelectedItemChangedEventArgs e)

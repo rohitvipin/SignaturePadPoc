@@ -39,10 +39,18 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Common\Constants.cs" />
-    <Compile Include="DAL\JobUserManager.cs" />
-    <Compile Include="DAL\ManagerBase.cs" />
+    <Compile Include="Common\ApplicationContext.cs" />
+    <Compile Include="DAL\DocumentRepository.cs" />
+    <Compile Include="DAL\JobUserRepository.cs" />
+    <Compile Include="DAL\RepositoryBase.cs" />
+    <Compile Include="DAL\Models\Document.cs" />
     <Compile Include="DAL\Models\JobUser.cs" />
     <Compile Include="DAL\Models\ModelBase.cs" />
+    <Compile Include="DAL\Models\UserDocument.cs" />
+    <Compile Include="DAL\Models\UserDocumentSignature.cs" />
+    <Compile Include="DAL\RepositoryManager.cs" />
+    <Compile Include="DAL\UserDocumentRepository.cs" />
+    <Compile Include="DAL\UserDocumentSignatureRepository.cs" />
     <Compile Include="Entities\DocumentEntity.cs" />
     <Compile Include="Views\DocumentPage.xaml.cs">
       <DependentUpon>DocumentPage.xaml</DependentUpon>
@@ -55,7 +63,7 @@
       <DependentUpon>SignaturePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="DAL\Models\TodoItem.cs" />
-    <Compile Include="DAL\TodoItemManager.cs" />
+    <Compile Include="DAL\TodoItemRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\MainPage.xaml">
@@ -78,6 +86,14 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Plugin.Connectivity, Version=2.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xam.Plugin.Connectivity.2.3.0\lib\portable-net45+wp80+win8+wpa81\Plugin.Connectivity.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Plugin.Connectivity.Abstractions, Version=2.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xam.Plugin.Connectivity.2.3.0\lib\portable-net45+wp80+win8+wpa81\Plugin.Connectivity.Abstractions.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SignaturePad.Forms, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
