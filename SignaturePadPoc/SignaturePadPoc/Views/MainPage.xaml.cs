@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Xamarin.Forms;
 
-namespace SignaturePadPoc
+namespace SignaturePadPoc.Views
 {
     public partial class MainPage : ContentPage
     {

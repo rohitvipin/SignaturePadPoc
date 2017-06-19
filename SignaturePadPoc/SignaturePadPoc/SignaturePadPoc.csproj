@@ -40,21 +40,21 @@
     </Compile>
     <Compile Include="Common\Constants.cs" />
     <Compile Include="Entities\DocumentEntity.cs" />
-    <Compile Include="DocumentPage.xaml.cs">
+    <Compile Include="Views\DocumentPage.xaml.cs">
       <DependentUpon>DocumentPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainPage.xaml.cs">
+    <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SignaturePage.xaml.cs">
+    <Compile Include="Views\SignaturePage.xaml.cs">
       <DependentUpon>SignaturePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="DAL\Models\TodoItem.cs" />
     <Compile Include="DAL\TodoItemManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="MainPage.xaml">
+    <EmbeddedResource Include="Views\MainPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -122,13 +122,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="SignaturePage.xaml">
+    <EmbeddedResource Include="Views\SignaturePage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="DocumentPage.xaml">
+    <EmbeddedResource Include="Views\DocumentPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>

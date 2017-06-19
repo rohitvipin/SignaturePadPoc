@@ -3,7 +3,7 @@ using System.IO;
 using SignaturePad.Forms;
 using Xamarin.Forms;
 
-namespace SignaturePadPoc
+namespace SignaturePadPoc.Views
 {
     public partial class SignaturePage : ContentPage
     {

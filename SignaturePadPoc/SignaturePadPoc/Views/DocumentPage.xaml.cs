@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Threading.Tasks;
+using SignaturePadPoc.Entities;
 using Xamarin.Forms;
 
-namespace SignaturePadPoc
+namespace SignaturePadPoc.Views
 {
     public partial class DocumentPage : ContentPage
     {
