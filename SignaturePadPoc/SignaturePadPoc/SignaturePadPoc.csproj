@@ -39,6 +39,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Common\Constants.cs" />
+    <Compile Include="DAL\Models\ModelBase.cs" />
     <Compile Include="Entities\DocumentEntity.cs" />
     <Compile Include="Views\DocumentPage.xaml.cs">
       <DependentUpon>DocumentPage.xaml</DependentUpon>
