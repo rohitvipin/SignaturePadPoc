@@ -42,10 +42,8 @@
     <Compile Include="Common\ApplicationContext.cs" />
     <Compile Include="Common\Extensions.cs" />
     <Compile Include="DAL\Repositories\DocumentRepository.cs" />
-    <Compile Include="DAL\Repositories\JobUserRepository.cs" />
     <Compile Include="DAL\Repositories\RepositoryBase.cs" />
     <Compile Include="DAL\Models\Document.cs" />
-    <Compile Include="DAL\Models\JobUser.cs" />
     <Compile Include="DAL\Models\ModelBase.cs" />
     <Compile Include="DAL\Models\UserDocument.cs" />
     <Compile Include="DAL\Models\UserDocumentSignature.cs" />

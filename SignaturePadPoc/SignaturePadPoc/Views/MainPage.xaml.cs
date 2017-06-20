@@ -40,13 +40,25 @@ namespace SignaturePadPoc.Views
         {
             ListView.IsRefreshing = true;
 
+            _documentEntities.Clear();
+
             var userDocuments = (await RepositoryManager.UserDocumentRepositoryInstance.GetAsync(x => x.AssignedUserId == ApplicationContext.LoggedInUserId && x.IsCompleted == false)).ToList();
 
             if (userDocuments?.Count > 0)
             {
-                Reset((await RepositoryManager.DocumentRepositoryInstance.GetAsync(x => userDocuments.Any(y => y.DocumentId == x.DocumentId)))
-                    ?.Where(x => userDocuments.Any(y => y.DocumentId == x.DocumentId))
-                    .ToList());
+                foreach (var userDocument in userDocuments)
+                {
+                    foreach (var document in await RepositoryManager.DocumentRepositoryInstance.GetAsync(x => x.DocumentId == userDocument.DocumentId))
+                    {
+                        _documentEntities.Add(new DocumentEntity
+                        {
+                            Url = document.DocumentUrl,
+                            Id = document.DocumentId,
+                            Title = document.Title,
+                            SubTitle = document.Description
+                        });
+                    }
+                }
             }
             else
             {
@@ -54,26 +66,6 @@ namespace SignaturePadPoc.Views
             }
 
             ListView.IsRefreshing = false;
-        }
-
-        private void Reset(IReadOnlyCollection<Document> documents)
-        {
-            _documentEntities.Clear();
-            if (!(documents?.Count > 0))
-            {
-                return;
-            }
-
-            foreach (var document in documents)
-            {
-                _documentEntities.Add(new DocumentEntity
-                {
-                    Url = document.DocumentUrl,
-                    Id = document.DocumentId,
-                    Title = document.Title,
-                    SubTitle = document.Description
-                });
-            }
         }
 
         private async void ListView_OnItemSelected(object sender, SelectedItemChangedEventArgs e)

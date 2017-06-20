@@ -6,6 +6,8 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.MobileServices;
 using Microsoft.WindowsAzure.MobileServices.Sync;
+using Plugin.Connectivity;
+using Plugin.Connectivity.Abstractions;
 using SignaturePadPoc.Common;
 using SignaturePadPoc.DAL.Models;
 
@@ -14,6 +16,8 @@ namespace SignaturePadPoc.DAL.Repositories
     public class RepositoryBase<T> where T : ModelBase
     {
         protected readonly IMobileServiceSyncTable<T> CurrentTable;
+        private DateTime _lastSuccessfulSyncDateTime = DateTime.MinValue;
+        private bool _isSyncing;
 
         public RepositoryBase()
         {
@@ -23,10 +27,10 @@ namespace SignaturePadPoc.DAL.Repositories
             }
             CurrentTable = ApplicationContext.MobileServiceClientInstance.GetSyncTable<T>();
 
-            Plugin.Connectivity.CrossConnectivity.Current.ConnectivityChanged += Current_ConnectivityChanged;
+            CrossConnectivity.Current.ConnectivityChanged += Current_ConnectivityChanged;
         }
 
-        private async void Current_ConnectivityChanged(object sender, Plugin.Connectivity.Abstractions.ConnectivityChangedEventArgs e)
+        private async void Current_ConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
         {
             if (e?.IsConnected == true)
             {
@@ -36,12 +40,12 @@ namespace SignaturePadPoc.DAL.Repositories
 
         protected async Task SyncAsync()
         {
-            if (RepositoryManager.IsSyncing || DateTime.Now.AddMinutes(-5) < RepositoryManager.LastSuccessfulSyncDateTime)
+            if (_isSyncing || DateTime.Now.AddMinutes(-5) < _lastSuccessfulSyncDateTime)
             {
                 return;
             }
 
-            if (Plugin.Connectivity.CrossConnectivity.Current.IsConnected == false)
+            if (CrossConnectivity.Current.IsConnected == false)
             {
                 return;
             }
@@ -50,12 +54,12 @@ namespace SignaturePadPoc.DAL.Repositories
 
             try
             {
-                RepositoryManager.IsSyncing = true;
+                _isSyncing = true;
 
                 await ApplicationContext.MobileServiceClientInstance.SyncContext.PushAsync();
                 await CurrentTable.PullAsync($"all{nameof(T)}", CurrentTable.CreateQuery());
 
-                RepositoryManager.LastSuccessfulSyncDateTime = DateTime.Now;
+                _lastSuccessfulSyncDateTime = DateTime.Now;
             }
             catch (MobileServicePushFailedException exc)
             {
@@ -86,7 +90,7 @@ namespace SignaturePadPoc.DAL.Repositories
                 }
             }
 
-            RepositoryManager.IsSyncing = false;
+            _isSyncing = false;
         }
 
         public async Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>> filterCondition = null, Expression<Func<T, bool>> orderBy = null)
@@ -95,16 +99,16 @@ namespace SignaturePadPoc.DAL.Repositories
             {
                 await SyncAsync();
 
-                var mobileServiceSyncTable = CurrentTable;
+                var mobileServiceTableQuery = CurrentTable.CreateQuery();
                 if (filterCondition != null)
                 {
-                    mobileServiceSyncTable.Where(filterCondition);
+                    mobileServiceTableQuery = mobileServiceTableQuery.Where(filterCondition);
                 }
                 if (orderBy != null)
                 {
-                    mobileServiceSyncTable.OrderBy(orderBy);
+                    mobileServiceTableQuery = mobileServiceTableQuery.OrderBy(orderBy);
                 }
-                return await mobileServiceSyncTable.ToEnumerableAsync();
+                return await mobileServiceTableQuery.ToEnumerableAsync();
             }
             catch (MobileServiceInvalidOperationException mobileServiceInvalidOperationException)
             {
@@ -137,8 +141,8 @@ namespace SignaturePadPoc.DAL.Repositories
 
         public async Task ForceSyncAsync()
         {
-            RepositoryManager.IsSyncing = false;
-            RepositoryManager.LastSuccessfulSyncDateTime = DateTime.MinValue;
+            _isSyncing = false;
+            _lastSuccessfulSyncDateTime = DateTime.MinValue;
             await SyncAsync();
         }
     }
