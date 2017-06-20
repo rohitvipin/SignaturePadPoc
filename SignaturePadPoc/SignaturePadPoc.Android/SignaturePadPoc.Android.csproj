@@ -187,6 +187,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <AndroidAsset Include="Assets\pdfjs\build\pdf.js" />
+    <AndroidAsset Include="Assets\pdfjs\build\pdf.worker.js" />
     <AndroidAsset Include="Assets\pdfjs\web\compressed.tracemonkey-pldi-09.pdf" />
     <AndroidAsset Include="Assets\pdfjs\web\cmaps\78-EUC-H.bcmap" />
     <AndroidAsset Include="Assets\pdfjs\web\cmaps\78-EUC-V.bcmap" />
@@ -485,12 +487,6 @@
       <Project>{9f117208-df60-412d-a45a-5bec6a0f17a6}</Project>
       <Name>SignaturePadPoc</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\pdfjs\build\pdf.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\pdfjs\build\pdf.worker.js" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\pdfjs\web\compatibility.js" />
