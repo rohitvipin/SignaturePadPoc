@@ -22,13 +22,19 @@ namespace SignaturePadPoc.Views
             Title = _selectedDocument.Title;
         }
 
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             try
             {
                 base.OnAppearing();
                 SetBusyIndicator(true);
-                PdfViewer.Uri = $"{FileManager.GetFilePathFromRoot(_selectedDocument.Id)}.pdf";
+                var fileName = $"{_selectedDocument.Id}.pdf";
+                var filePath = FileManager.GetFilePathFromRoot(fileName);
+                if (await FileManager.ExistsAsync(filePath) == false)
+                {
+                    await FileManager.DownloadDocumentsAsync(_selectedDocument);
+                }
+                PdfViewer.Uri = filePath;
                 PdfViewer.Navigated += PdfViewer_OnNavigated;
                 PdfViewer.Navigating += PdfViewer_Navigating;
             }

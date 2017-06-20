@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using PCLStorage;
 using SignaturePadPoc.Common;
 using SignaturePadPoc.DAL;
+using SignaturePadPoc.Entities;
 
 namespace SignaturePadPoc.FileAccessLayer
 {
@@ -48,6 +49,26 @@ namespace SignaturePadPoc.FileAccessLayer
             }
         }
 
-        public static string GetFilePathFromRoot(int selectedDocumentId) => Path.Combine(FileSystem.Current.LocalStorage.Path, selectedDocumentId.ToString());
+        public static string GetFilePathFromRoot(string fileName) => Path.Combine(FileSystem.Current.LocalStorage.Path, fileName);
+
+        public static async Task<bool> ExistsAsync(string fileName) => await FileSystem.Current.LocalStorage.CheckExistsAsync(fileName) == ExistenceCheckResult.FileExists;
+
+        public static async Task DownloadDocumentsAsync(DocumentEntity documentEntity)
+        {
+            var userDocument = (await RepositoryManager.UserDocumentRepositoryInstance.GetAsync(x => x.DocumentId == documentEntity.Id))?.FirstOrDefault();
+            if (userDocument == null)
+            {
+                return;
+            }
+
+            var stream = await RestApiHelper.DownloadFileAsync(documentEntity.Url);
+            if (stream == null)
+            {
+                return;
+            }
+            await SaveFileAsync($"{documentEntity.Id}.pdf", stream);
+            userDocument.IsDownloaded = true;
+            await RepositoryManager.UserDocumentRepositoryInstance.SaveAsync(userDocument);
+        }
     }
 }
