@@ -1,4 +1,5 @@
-﻿using Microsoft.WindowsAzure.MobileServices;
+﻿using System.Threading.Tasks;
+using Microsoft.WindowsAzure.MobileServices;
 using Microsoft.WindowsAzure.MobileServices.SQLiteStore;
 using SignaturePadPoc.Common;
 using SignaturePadPoc.DAL.Models;
@@ -45,6 +46,16 @@ namespace SignaturePadPoc.DAL
         {
             get { return _userDocumentSignatureRepositoryInstance ?? (_userDocumentSignatureRepositoryInstance = new UserDocumentSignatureRepository()); }
             set { _userDocumentSignatureRepositoryInstance = value; }
+        }
+
+        public static async Task SyncAllTablesAsync()
+        {
+            var documentSyncAsync = DocumentRepositoryInstance.SyncAsync();
+            var userDocumentSyncAsync = UserDocumentRepositoryInstance.SyncAsync();
+            var userDocumentSignatureSyncAsync = UserDocumentSignatureRepositoryInstance.SyncAsync();
+            await documentSyncAsync;
+            await userDocumentSyncAsync;
+            await userDocumentSignatureSyncAsync;
         }
     }
 }

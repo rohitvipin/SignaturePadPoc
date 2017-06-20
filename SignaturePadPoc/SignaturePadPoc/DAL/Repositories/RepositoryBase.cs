@@ -38,7 +38,7 @@ namespace SignaturePadPoc.DAL.Repositories
             }
         }
 
-        protected async Task SyncAsync()
+        public async Task SyncAsync()
         {
             if (_isSyncing || DateTime.Now.AddMinutes(-5) < _lastSuccessfulSyncDateTime)
             {

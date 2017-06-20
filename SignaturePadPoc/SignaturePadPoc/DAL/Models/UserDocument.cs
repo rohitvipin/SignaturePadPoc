@@ -10,6 +10,9 @@ namespace SignaturePadPoc.DAL.Models
         [JsonProperty(PropertyName = "documentId")]
         public int DocumentId { get; set; }
 
+        [JsonProperty(PropertyName = "isDownloaded")]
+        public bool IsDownloaded { get; set; }
+
         [JsonProperty(PropertyName = "isCompleted")]
         public bool IsCompleted { get; set; }
     }

@@ -9,6 +9,7 @@ using SignaturePadPoc.Common;
 using SignaturePadPoc.DAL;
 using SignaturePadPoc.DAL.Models;
 using SignaturePadPoc.Entities;
+using SignaturePadPoc.FileAccessLayer;
 using Xamarin.Forms;
 
 namespace SignaturePadPoc.Views
@@ -48,7 +49,8 @@ namespace SignaturePadPoc.Views
             {
                 foreach (var userDocument in userDocuments)
                 {
-                    foreach (var document in await RepositoryManager.DocumentRepositoryInstance.GetAsync(x => x.DocumentId == userDocument.DocumentId))
+                    var document = (await RepositoryManager.DocumentRepositoryInstance.GetAsync(x => x.DocumentId == userDocument.DocumentId))?.FirstOrDefault();
+                    if (document != null)
                     {
                         _documentEntities.Add(new DocumentEntity
                         {
@@ -91,6 +93,7 @@ namespace SignaturePadPoc.Views
         {
             await RepositoryManager.UserDocumentRepositoryInstance.ForceSyncAsync();
             await RepositoryManager.DocumentRepositoryInstance.ForceSyncAsync();
+            await FileManager.DownloadAllUserDocumentsAsync();
             await RefreshListDataAsync();
         }
     }

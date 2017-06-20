@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
 using SignaturePadPoc.Entities;
+using SignaturePadPoc.FileAccessLayer;
 using Xamarin.Forms;
 
 namespace SignaturePadPoc.Views
@@ -15,27 +18,36 @@ namespace SignaturePadPoc.Views
 
         public DocumentPage(DocumentEntity selectedDocument) : this()
         {
-            WebView.Navigating += WebView_Navigating;
-            WebView.Navigated += WebView_Navigated;
-
             _selectedDocument = selectedDocument;
             Title = _selectedDocument.Title;
-
-            WebView.Source = new UrlWebViewSource
-            {
-                Url = selectedDocument.Url
-            };
         }
-
-        private void WebView_Navigated(object sender, WebNavigatedEventArgs e) => SetBusyIndicator(false);
-
-        private void WebView_Navigating(object sender, WebNavigatingEventArgs e) => SetBusyIndicator(true);
 
         protected override void OnAppearing()
         {
-            base.OnAppearing();
-            SetBusyIndicator(true);
+            try
+            {
+                base.OnAppearing();
+                SetBusyIndicator(true);
+                PdfViewer.Uri = $"{FileManager.GetFilePathFromRoot(_selectedDocument.Id)}.pdf";
+                PdfViewer.Navigated += PdfViewer_OnNavigated;
+                PdfViewer.Navigating += PdfViewer_Navigating;
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception);
+            }
         }
+
+        private void PdfViewer_Navigating(object sender, EventArgs e) => SetBusyIndicator(true);
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            PdfViewer.Navigated -= PdfViewer_OnNavigated;
+            PdfViewer.Navigating -= PdfViewer_Navigating;
+        }
+
+        private void PdfViewer_OnNavigated(object sender, EventArgs args) => SetBusyIndicator(false);
 
         private void SetBusyIndicator(bool isBusyIndicatorIsVisible) => BusyIndicator.IsRunning = BusyIndicator.IsVisible = isBusyIndicatorIsVisible;
 

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Foundation;
+﻿using Foundation;
 using UIKit;
 
 namespace SignaturePadPoc.iOS
@@ -24,6 +20,8 @@ namespace SignaturePadPoc.iOS
         {
             global::Xamarin.Forms.Forms.Init();
             LoadApplication(new App());
+
+            var sfPdfDocumentViewRenderer = new Syncfusion.SfPdfViewer.XForms.iOS.SfPdfDocumentViewRenderer();
 
             return base.FinishedLaunching(app, options);
         }
