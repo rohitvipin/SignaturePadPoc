@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using SignaturePadPoc.Common;
 using SignaturePadPoc.DAL;
-using SignaturePadPoc.DAL.Models;
 using SignaturePadPoc.Entities;
 using SignaturePadPoc.FileAccessLayer;
 using Xamarin.Forms;

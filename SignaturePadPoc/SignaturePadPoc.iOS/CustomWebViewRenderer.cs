@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Net;
+﻿using System.ComponentModel;
 using Foundation;
 using SignaturePadPoc;
 using SignaturePadPoc.iOS;
@@ -29,8 +28,26 @@ namespace SignaturePadPoc.iOS
                 return;
             }
             var customWebView = Element;
-            Control.LoadRequest(new NSUrlRequest(new NSUrl(Path.Combine(NSBundle.MainBundle.BundlePath, $"Content/{WebUtility.UrlEncode(customWebView.Uri)}"), false)));
+            LoadFile(customWebView.Uri);
             Control.ScalesPageToFit = true;
+        }
+
+        protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            base.OnElementPropertyChanged(sender, e);
+            if (e.PropertyName == CustomWebView.UriProperty.PropertyName)
+            {
+                LoadFile(Element?.Uri);
+            }
+        }
+
+        private void LoadFile(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                return;
+            }
+            Control.LoadRequest(new NSUrlRequest(new NSUrl(path, false)));
         }
     }
 }

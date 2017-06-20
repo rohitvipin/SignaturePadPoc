@@ -2,9 +2,18 @@
 
 namespace SignaturePadPoc.Common
 {
-    public class ApplicationContext
+    public static class ApplicationContext
     {
-        public static readonly MobileServiceClient MobileServiceClientInstance = new MobileServiceClient(Constants.ApplicationUrl);
+        public static bool IsInitialized { get; private set; }
+
+        public static MobileServiceClient MobileServiceClientInstance { get; private set; }
+
         public static int LoggedInUserId { get; set; } = 123;
+
+        public static void Initialize()
+        {
+            IsInitialized = true;
+            MobileServiceClientInstance = new MobileServiceClient(Constants.ApplicationUrl);
+        }
     }
 }

@@ -1,6 +1,4 @@
 ﻿using System;
-using SignaturePadPoc.DAL;
-using SignaturePadPoc.DAL.Models;
 using SignaturePadPoc.ViewModels;
 using Xamarin.Forms;
 

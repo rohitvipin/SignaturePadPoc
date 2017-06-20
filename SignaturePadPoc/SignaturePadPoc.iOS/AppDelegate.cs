@@ -1,4 +1,5 @@
 ﻿using Foundation;
+using Microsoft.WindowsAzure.MobileServices;
 using UIKit;
 
 namespace SignaturePadPoc.iOS
@@ -19,10 +20,13 @@ namespace SignaturePadPoc.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
+
+            CurrentPlatform.Init();
+
             LoadApplication(new App());
 
             var sfPdfDocumentViewRenderer = new Syncfusion.SfPdfViewer.XForms.iOS.SfPdfDocumentViewRenderer();
-
+            
             return base.FinishedLaunching(app, options);
         }
     }

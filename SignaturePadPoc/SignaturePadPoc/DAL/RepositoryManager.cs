@@ -15,18 +15,20 @@ namespace SignaturePadPoc.DAL
 
         public static bool IsInitialized { get; private set; }
 
-        static RepositoryManager()
-        {
-            Initialize();
-        }
-
         public static void Initialize()
         {
             IsInitialized = true;
+
             var store = new MobileServiceSQLiteStore(Constants.OfflineDbPath);
             store.DefineTable<Document>();
             store.DefineTable<UserDocument>();
             store.DefineTable<UserDocumentSignature>();
+
+            if (ApplicationContext.IsInitialized == false)
+            {
+                ApplicationContext.Initialize();
+            }
+
             ApplicationContext.MobileServiceClientInstance.SyncContext.InitializeAsync(store);
         }
 
