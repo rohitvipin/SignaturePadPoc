@@ -3,13 +3,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SignaturePadPoc.Views.AddDocumentPage"
              Title="Add New Document">
-    <StackLayout VerticalOptions="FillAndExpand">
-        <Entry Placeholder="DocumentId" Text="{Binding Document.DocumentId}" />
-        <Entry Placeholder="Title" Text="{Binding Document.Title}"/>
-        <Entry Placeholder="Description" Text="{Binding Document.Description}"/>
-        <Entry Placeholder="Document Url" Text="{Binding Document.DocumentUrl}"/>
-        <Entry Placeholder="Assigned UserId" Text="{Binding UserId}" />
-        <ActivityIndicator HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"/>
-        <Button Text="Save" Clicked="Button_OnClicked" VerticalOptions="End" HorizontalOptions="FillAndExpand" BackgroundColor="Green" TextColor="White"/>
+  <Grid VerticalOptions="FillAndExpand">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+    <StackLayout Grid.Row="0" Padding="10">
+      <Entry Placeholder="DocumentId" Text="{Binding Document.DocumentId}" />
+      <Entry Placeholder="Title" Text="{Binding Document.Title}"/>
+      <Entry Placeholder="Description" Text="{Binding Document.Description}"/>
+      <Entry Placeholder="Document Url" Text="{Binding Document.DocumentUrl}"/>
+      <Entry Placeholder="Assigned UserId" Text="{Binding UserId}" />
+      <ActivityIndicator HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"/>
     </StackLayout>
+    <Button Grid.Row="1" Text="Save" Clicked="Button_OnClicked" VerticalOptions="End" HorizontalOptions="FillAndExpand" BackgroundColor="#27AE60" TextColor="White"/>
+  </Grid>
 </ContentPage>
