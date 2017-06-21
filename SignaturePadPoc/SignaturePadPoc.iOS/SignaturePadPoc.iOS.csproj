@@ -51,6 +51,7 @@
     <MtouchDebug>true</MtouchDebug>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
+    <CodesignProvision>iOS Team Provisioning Profile: *</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>
@@ -397,6 +398,9 @@
     <BundleResource Include="Resources\Icon-Small%402x.png" />
     <BundleResource Include="Resources\Icon-Small%403x.png" />
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
+    <BundleResource Include="Resources\logo.png" />
+    <BundleResource Include="Resources\logo%402x.png" />
+    <BundleResource Include="Resources\logo%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -513,7 +517,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SignaturePadPoc\SignaturePadPoc.csproj">
-      <Project>{9f117208-df60-412d-a45a-5bec6a0f17a6}</Project>
+      <Project>{20B2D129-EE07-4D7B-9787-9E579DE1DAA6}</Project>
       <Name>SignaturePadPoc</Name>
     </ProjectReference>
   </ItemGroup>
