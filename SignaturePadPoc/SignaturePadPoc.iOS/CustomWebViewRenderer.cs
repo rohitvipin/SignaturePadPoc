@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.IO;
 using Foundation;
 using SignaturePadPoc;
 using SignaturePadPoc.iOS;
@@ -29,6 +30,7 @@ namespace SignaturePadPoc.iOS
             }
             var customWebView = Element;
             LoadFile(customWebView.Uri);
+
             Control.ScalesPageToFit = true;
         }
 
@@ -47,7 +49,16 @@ namespace SignaturePadPoc.iOS
             {
                 return;
             }
-            Control.LoadRequest(new NSUrlRequest(new NSUrl(path, false)));
+
+            Control.LoadRequest(new NSUrlRequest(new NSUrl(Path.Combine(NSBundle.MainBundle.BundlePath, "Content/pdfjs/web/viewer.html"), false)));
+            Control.LoadFinished += Control_LoadFinished;
+        }
+
+        private void Control_LoadFinished(object sender, System.EventArgs e)
+        {
+            Control.LoadFinished -= Control_LoadFinished;
+
+            Control.EvaluateJavascript($"DEFAULT_URL='{Element?.Uri}'; window.location.href='{Path.Combine(NSBundle.MainBundle.BundlePath, "Content/pdfjs/web/viewer.html")}?file=file://{Element?.Uri}'");
         }
     }
 }
