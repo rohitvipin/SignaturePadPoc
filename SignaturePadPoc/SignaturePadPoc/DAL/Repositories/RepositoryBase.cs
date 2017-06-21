@@ -121,6 +121,16 @@ namespace SignaturePadPoc.DAL.Repositories
             return null;
         }
 
+        public async Task DeleteAsync(T item)
+        {
+            if (item?.Id == null)
+            {
+                return;
+            }
+
+            await CurrentTable.DeleteAsync(item);
+        }
+
         public async Task SaveAsync(T item)
         {
             if (item == null)

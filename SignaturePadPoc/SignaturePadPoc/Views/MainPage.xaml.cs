@@ -96,5 +96,30 @@ namespace SignaturePadPoc.Views
         }
 
         private async void ShowCompleted_OnClicked(object sender, EventArgs e) => await Navigation.PushAsync(new CompletedPage());
+
+        private async void ListItem_OnDelete(object sender, EventArgs e)
+        {
+            ListView.IsRefreshing = true;
+
+            var documentEntity = (sender as MenuItem)?.CommandParameter as DocumentEntity;
+            if (documentEntity == null)
+            {
+                return;
+            }
+
+            var document = (await RepositoryManager.DocumentRepositoryInstance.GetAsync(x => x.DocumentId == documentEntity.Id))?.FirstOrDefault();
+            if (document != null)
+            {
+                await RepositoryManager.DocumentRepositoryInstance.DeleteAsync(document);
+            }
+
+            var userDocument = (await RepositoryManager.UserDocumentRepositoryInstance.GetAsync(x => x.DocumentId == documentEntity.Id))?.FirstOrDefault();
+            if (userDocument != null)
+            {
+                await RepositoryManager.UserDocumentRepositoryInstance.DeleteAsync(userDocument);
+            }
+
+            _documentEntities.Remove(documentEntity);
+        }
     }
 }

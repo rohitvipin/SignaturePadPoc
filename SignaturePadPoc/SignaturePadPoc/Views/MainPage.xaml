@@ -20,8 +20,11 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
+                        <ViewCell.ContextActions>
+                            <MenuItem Clicked="ListItem_OnDelete" CommandParameter="{Binding .}" Text="Delete" IsDestructive="True" />
+                        </ViewCell.ContextActions>
                         <StackLayout Padding="10" Spacing="3" VerticalOptions="Center">
-                            <Label Text="{Binding Title}" FontSize="Medium" FontAttributes = "Bold" TextColor="Black" LineBreakMode="NoWrap"/>
+                            <Label Text="{Binding Title}" FontSize="Medium" FontAttributes="Bold" TextColor="Black" LineBreakMode="NoWrap"/>
                             <Label Text="{Binding SubTitle}" FontSize="Small" LineBreakMode="WordWrap" TextColor="Black"/>
                         </StackLayout>
                     </ViewCell>
