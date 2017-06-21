@@ -4,7 +4,7 @@
              x:Class="SignaturePadPoc.Views.CompletedPage"
              Title="Completed Items">
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Sync" Clicked="MenuItem_OnClicked" />
+        <ToolbarItem Icon="sync" Clicked="MenuItem_OnClicked" />
     </ContentPage.ToolbarItems>
 
     <ListView x:Name="ListView" VerticalOptions="FillAndExpand" HasUnevenRows="True" ItemSelected="ListView_OnItemSelected" IsPullToRefreshEnabled="True">
