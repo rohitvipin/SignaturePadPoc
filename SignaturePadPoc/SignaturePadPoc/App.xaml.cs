@@ -13,6 +13,8 @@ namespace SignaturePadPoc
 {
     public partial class App : Application
     {
+        private bool _isSyncing;
+
         public App()
         {
             InitializeComponent();
@@ -39,22 +41,34 @@ namespace SignaturePadPoc
             });
         }
 
-        private static async Task SyncAllDocumentsAsync()
+        private async Task SyncAllDocumentsAsync()
         {
+            if (_isSyncing)
+            {
+                return;
+            }
+
             if (RepositoryManager.IsInitialized == false || ApplicationContext.IsInitialized == false)
             {
                 return;
             }
 
+            _isSyncing = true;
+
             var syncAllTablesAsync = RepositoryManager.SyncAllTablesAsync();
             var downloadAllUserDocumentsAsync = FileManager.DownloadAllUserDocumentsAsync();
             await syncAllTablesAsync;
             await downloadAllUserDocumentsAsync;
+
+            _isSyncing = false;
         }
 
         protected override void OnStart()
         {
-            // Handle when your app starts
+            if (CrossConnectivity.Current.IsConnected)
+            {
+                Task.Run(async () => await SyncAllDocumentsAsync());
+            }
         }
 
         protected override void OnSleep()
@@ -62,11 +76,11 @@ namespace SignaturePadPoc
             // Handle when your app sleeps
         }
 
-        protected override async void OnResume()
+        protected override void OnResume()
         {
             if (CrossConnectivity.Current.IsConnected)
             {
-                await Task.Run(async () => await SyncAllDocumentsAsync());
+                Task.Run(async () => await SyncAllDocumentsAsync());
             }
         }
     }

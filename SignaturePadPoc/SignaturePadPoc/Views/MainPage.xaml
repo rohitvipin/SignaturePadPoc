@@ -3,28 +3,33 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SignaturePadPoc.Views.MainPage"
              Title="CES Poc">
-  <ContentPage.ToolbarItems>
-    <ToolbarItem Text="Sync" Clicked="MenuItem_OnClicked" />
-  </ContentPage.ToolbarItems>
-  <Grid VerticalOptions="FillAndExpand">
-    <Grid.RowDefinitions>
-      <RowDefinition Height="*"/>
-      <RowDefinition Height="Auto"/>
-    </Grid.RowDefinitions>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Sync" Clicked="MenuItem_OnClicked" />
+    </ContentPage.ToolbarItems>
+    <Grid VerticalOptions="FillAndExpand">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
-    <ListView Grid.Row="0" x:Name="ListView" VerticalOptions="FillAndExpand" HasUnevenRows="True" ItemSelected="ListView_OnItemSelected" IsPullToRefreshEnabled="True">
-      <ListView.ItemTemplate>
-        <DataTemplate>
-          <ViewCell>
-            <StackLayout Padding="10" Spacing="3" VerticalOptions="Center">
-              <Label Text="{Binding Title}" FontSize="Medium" FontAttributes = "Bold" TextColor="Black" LineBreakMode="NoWrap"/>
-              <Label Text="{Binding SubTitle}" FontSize="Small" LineBreakMode="WordWrap" TextColor="Black"/>
-            </StackLayout>
-          </ViewCell>
-        </DataTemplate>
-      </ListView.ItemTemplate>
-    </ListView>
-    <Button Grid.Row="1" Text="Add New Record" Clicked="Button_OnClicked" BackgroundColor="#27AE60" TextColor="White"/>
-  </Grid>
+        <ListView Grid.Row="0" Grid.ColumnSpan="2" x:Name="ListView" VerticalOptions="FillAndExpand" HasUnevenRows="True" ItemSelected="ListView_OnItemSelected" IsPullToRefreshEnabled="True">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout Padding="10" Spacing="3" VerticalOptions="Center">
+                            <Label Text="{Binding Title}" FontSize="Medium" FontAttributes = "Bold" TextColor="Black" LineBreakMode="NoWrap"/>
+                            <Label Text="{Binding SubTitle}" FontSize="Small" LineBreakMode="WordWrap" TextColor="Black"/>
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <Button Grid.Row="1" Grid.Column="0" Text="Add New Record" Clicked="AddNewRecord_OnClicked" BackgroundColor="#27AE60" TextColor="White"/>
+        <Button Grid.Row="1" Grid.Column="1" Text="Show Completed" Clicked="ShowCompleted_OnClicked" BackgroundColor="#099ccc" TextColor="White"/>
+    </Grid>
 
 </ContentPage>

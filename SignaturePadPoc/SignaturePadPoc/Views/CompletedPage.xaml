@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SignaturePadPoc.Views.CompletedPage"
+             Title="Completed Items">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Sync" Clicked="MenuItem_OnClicked" />
+    </ContentPage.ToolbarItems>
+
+    <ListView x:Name="ListView" VerticalOptions="FillAndExpand" HasUnevenRows="True" ItemSelected="ListView_OnItemSelected" IsPullToRefreshEnabled="True">
+        <ListView.ItemTemplate>
+            <DataTemplate>
+                <ViewCell>
+                    <StackLayout Padding="10" Spacing="3" VerticalOptions="Center">
+                        <Label Text="{Binding Title}" FontSize="Medium" FontAttributes = "Bold" TextColor="Black" LineBreakMode="NoWrap"/>
+                        <Label Text="{Binding SubTitle}" FontSize="Small" LineBreakMode="WordWrap" TextColor="Black"/>
+                    </StackLayout>
+                </ViewCell>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
+</ContentPage>

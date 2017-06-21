@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -15,17 +16,25 @@ namespace SignaturePadPoc
                 return null;
             }
 
-            var stream = new MemoryStream();
-            using (var httpClient = new HttpClient())
+            try
             {
-                var downloadStream = await httpClient.GetStreamAsync(new Uri(url));
-                if (downloadStream != null)
+                var stream = new MemoryStream();
+                using (var httpClient = new HttpClient())
                 {
-                    await downloadStream.CopyToAsync(stream);
+                    var downloadStream = await httpClient.GetStreamAsync(new Uri(url));
+                    if (downloadStream != null)
+                    {
+                        await downloadStream.CopyToAsync(stream);
+                    }
                 }
-            }
 
-            return stream;
+                return stream;
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception);
+                return null;
+            }
         }
     }
 }

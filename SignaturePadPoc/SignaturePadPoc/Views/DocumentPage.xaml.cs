@@ -18,6 +18,7 @@ namespace SignaturePadPoc.Views
         {
             _selectedDocument = selectedDocument;
             Title = _selectedDocument.Title;
+            Button.Text = _selectedDocument.IsCompleted ? "View Signature" : "Accept";
         }
 
         protected override async void OnAppearing()
@@ -38,6 +39,16 @@ namespace SignaturePadPoc.Views
 
         private void SetBusyIndicator(bool isBusyIndicatorIsVisible) => BusyIndicator.IsRunning = BusyIndicator.IsVisible = isBusyIndicatorIsVisible;
 
-        private async void Button_OnClicked(object sender, EventArgs e) => await Navigation.PushAsync(new SignaturePage(_selectedDocument));
+        private async void Button_OnClicked(object sender, EventArgs e)
+        {
+            if (_selectedDocument.IsCompleted)
+            {
+                await Navigation.PushAsync(new ViewSignaturePage(_selectedDocument));
+            }
+            else
+            {
+                await Navigation.PushAsync(new SignaturePage(_selectedDocument));
+            }
+        }
     }
 }

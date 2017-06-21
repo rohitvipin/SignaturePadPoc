@@ -10,11 +10,11 @@ using Xamarin.Forms;
 
 namespace SignaturePadPoc.Views
 {
-    public partial class MainPage : ContentPage
+    public partial class CompletedPage : ContentPage
     {
         private readonly ObservableCollection<DocumentEntity> _documentEntities = new ObservableCollection<DocumentEntity>();
 
-        public MainPage()
+        public CompletedPage()
         {
             InitializeComponent();
             ListView.ItemsSource = _documentEntities;
@@ -39,7 +39,7 @@ namespace SignaturePadPoc.Views
 
             _documentEntities.Clear();
 
-            var userDocuments = (await RepositoryManager.UserDocumentRepositoryInstance.GetAsync(x => x.AssignedUserId == ApplicationContext.LoggedInUserId && x.IsCompleted == false)).ToList();
+            var userDocuments = (await RepositoryManager.UserDocumentRepositoryInstance.GetAsync(x => x.AssignedUserId == ApplicationContext.LoggedInUserId && x.IsCompleted)).ToList();
 
             if (userDocuments?.Count > 0)
             {
@@ -48,13 +48,16 @@ namespace SignaturePadPoc.Views
                     var document = (await RepositoryManager.DocumentRepositoryInstance.GetAsync(x => x.DocumentId == userDocument.DocumentId))?.FirstOrDefault();
                     if (document != null)
                     {
+                        var userDocumentSignature = (await RepositoryManager.UserDocumentSignatureRepositoryInstance.GetAsync(x => x.DocumentId == userDocument.DocumentId))?.FirstOrDefault();
+                        
                         _documentEntities.Add(new DocumentEntity
                         {
                             Url = document.DocumentUrl,
                             Id = document.DocumentId,
                             Title = document.Title,
                             SubTitle = document.Description,
-                            IsCompleted = userDocument.IsCompleted
+                            IsCompleted = userDocument.IsCompleted,
+                            SignatureBase64 = userDocumentSignature?.SignatureBase64
                         });
                     }
                 }
@@ -84,8 +87,6 @@ namespace SignaturePadPoc.Views
             ListView.SelectedItem = null;
         }
 
-        private async void AddNewRecord_OnClicked(object sender, EventArgs e) => await Navigation.PushAsync(new AddDocumentPage());
-
         private async void MenuItem_OnClicked(object sender, EventArgs e)
         {
             ListView.IsRefreshing = true;
@@ -94,7 +95,5 @@ namespace SignaturePadPoc.Views
             await FileManager.DownloadAllUserDocumentsAsync();
             await RefreshListDataAsync();
         }
-
-        private async void ShowCompleted_OnClicked(object sender, EventArgs e) => await Navigation.PushAsync(new CompletedPage());
     }
 }
