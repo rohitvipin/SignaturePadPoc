@@ -1,5 +1,7 @@
 ﻿using SignaturePadPoc.Entities;
 using Xamarin.Forms;
+using System.IO;
+using System;
 
 namespace SignaturePadPoc.Views
 {
@@ -13,10 +15,7 @@ namespace SignaturePadPoc.Views
         public ViewSignaturePage(DocumentEntity selectedDocument) : this()
         {
             Title = selectedDocument.Title;
-            WebView.Source = new HtmlWebViewSource
-            {
-                Html = $"<html><head><title>Page Title</title></head><body><img src='data:image/png; base64,{selectedDocument.SignatureBase64}' alt='Signature Missing' style='width:75%; height: 75%;'/></body></html>"
-            };
+            Image.Source = ImageSource.FromStream(() => new MemoryStream(Convert.FromBase64String(selectedDocument.SignatureBase64)));
         }
     }
 }
