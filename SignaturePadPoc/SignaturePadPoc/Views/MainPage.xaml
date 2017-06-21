@@ -4,7 +4,7 @@
              x:Class="SignaturePadPoc.Views.MainPage"
              Title="CES Poc">
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Sync" Clicked="MenuItem_OnClicked" />
+        <ToolbarItem Icon="sync" Clicked="MenuItem_OnClicked" />
     </ContentPage.ToolbarItems>
     <Grid VerticalOptions="FillAndExpand">
         <Grid.ColumnDefinitions>
