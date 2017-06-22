@@ -38,6 +38,15 @@ See https://github.com/adobe-type-tools/cmap-resources
 
     <script src="viewer.js"></script>
 
+    <script>
+        (function () {
+            window.print = function () {
+                // Trigger location change
+                window.location = "SignaturePadPoc_app_scheme:print";
+            }
+        })();
+    </script>
+
 </head>
 <body tabindex="1" class="loadingInProgress">
     <div id="outerContainer">
