@@ -25,8 +25,6 @@ namespace SignaturePadPoc.iOS
 
             LoadApplication(new App());
 
-            var sfPdfDocumentViewRenderer = new Syncfusion.SfPdfViewer.XForms.iOS.SfPdfDocumentViewRenderer();
-            
             return base.FinishedLaunching(app, options);
         }
     }
