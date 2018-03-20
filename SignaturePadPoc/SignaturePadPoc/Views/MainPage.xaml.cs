@@ -39,7 +39,7 @@ namespace SignaturePadPoc.Views
 
             _documentEntities.Clear();
 
-            var userDocuments = (await RepositoryManager.UserDocumentRepositoryInstance.GetAsync(x => x.AssignedUserId == ApplicationContext.LoggedInUserId && x.IsCompleted == false)).ToList();
+            var userDocuments = (await RepositoryManager.UserDocumentRepositoryInstance.GetAsync(x => x.AssignedUserId == ApplicationContext.LoggedInUserId && x.IsCompleted == false))?.ToList();
 
             if (userDocuments?.Count > 0)
             {
@@ -74,9 +74,7 @@ namespace SignaturePadPoc.Views
                 return;
             }
 
-            var selectedDocument = e.SelectedItem as DocumentEntity;
-
-            if (selectedDocument != null)
+            if (e.SelectedItem is DocumentEntity selectedDocument)
             {
                 await Navigation.PushAsync(new DocumentPage(selectedDocument));
             }
@@ -101,8 +99,7 @@ namespace SignaturePadPoc.Views
         {
             ListView.IsRefreshing = true;
 
-            var documentEntity = (sender as MenuItem)?.CommandParameter as DocumentEntity;
-            if (documentEntity == null)
+            if (!((sender as MenuItem)?.CommandParameter is DocumentEntity documentEntity))
             {
                 return;
             }

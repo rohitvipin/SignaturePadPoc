@@ -34,20 +34,20 @@ namespace SignaturePadPoc.DAL
 
         public static DocumentRepository DocumentRepositoryInstance
         {
-            get { return _documentRepositoryInstance ?? (_documentRepositoryInstance = new DocumentRepository()); }
-            set { _documentRepositoryInstance = value; }
+            get => _documentRepositoryInstance ?? (_documentRepositoryInstance = new DocumentRepository());
+            set => _documentRepositoryInstance = value;
         }
 
         public static UserDocumentRepository UserDocumentRepositoryInstance
         {
-            get { return _userDocumentRepositoryInstance ?? (_userDocumentRepositoryInstance = new UserDocumentRepository()); }
-            set { _userDocumentRepositoryInstance = value; }
+            get => _userDocumentRepositoryInstance ?? (_userDocumentRepositoryInstance = new UserDocumentRepository());
+            set => _userDocumentRepositoryInstance = value;
         }
 
         public static UserDocumentSignatureRepository UserDocumentSignatureRepositoryInstance
         {
-            get { return _userDocumentSignatureRepositoryInstance ?? (_userDocumentSignatureRepositoryInstance = new UserDocumentSignatureRepository()); }
-            set { _userDocumentSignatureRepositoryInstance = value; }
+            get => _userDocumentSignatureRepositoryInstance ?? (_userDocumentSignatureRepositoryInstance = new UserDocumentSignatureRepository());
+            set => _userDocumentSignatureRepositoryInstance = value;
         }
 
         public static async Task SyncAllTablesAsync()
