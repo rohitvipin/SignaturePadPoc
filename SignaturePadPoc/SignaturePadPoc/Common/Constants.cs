@@ -2,7 +2,7 @@
 {
     public static class Constants
     {
-        public const string ApplicationUrl = @"https://cesofflinesignturesyncpoc.azurewebsites.net";
+        public const string ApplicationUrl = @"https://cesofflinesignture.azurewebsites.net";
         public const string OfflineDbPath = @"cesofflinesignturesyncpoclocalstore.db";
     }
 }
