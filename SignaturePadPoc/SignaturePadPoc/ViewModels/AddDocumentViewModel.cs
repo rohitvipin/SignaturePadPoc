@@ -16,7 +16,7 @@ namespace SignaturePadPoc.ViewModels
 
         public string UserId
         {
-            get { return _userId; }
+            get => _userId;
             set
             {
                 _userId = value;
@@ -26,7 +26,7 @@ namespace SignaturePadPoc.ViewModels
 
         public bool IsBusy
         {
-            get { return _isBusy; }
+            get => _isBusy;
             set
             {
                 _isBusy = value;
